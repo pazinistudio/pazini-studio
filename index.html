@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pazini Studio · Tráfego Pago</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#08090b;
+    --bg-elev:#111316;
+    --bg-elev-2:#16181c;
+    --hair:rgba(245,243,238,0.09);
+    --gold:#c9a227;
+    --gold-soft:#e8cd7a;
+    --gold-dim:rgba(201,162,39,0.35);
+    --ink:#f5f3ee;
+    --ink-dim:#9c9a93;
+    --ink-faint:#65635c;
+    --growth:#4caf7d;
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--gold-dim);color:var(--ink);}
+  :focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- PRELOADER ---------- */
+  #preloader{
+    position:fixed;inset:0;background:#08090b;z-index:999;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px;
+    transition:opacity 0.9s ease, visibility 0.9s ease;
+  }
+  #preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .pre-mark{
+    font-family:var(--font-display);font-weight:500;font-size:clamp(28px,5vw,44px);
+    letter-spacing:0.02em;color:var(--gold-soft);
+    opacity:0;filter:blur(6px);
+    animation:markIn 1.4s cubic-bezier(.16,1,.3,1) forwards 0.2s;
+  }
+  .pre-line{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    animation:lineGrow 1.1s ease forwards 0.9s;}
+  .pre-tag{
+    font-family:var(--font-body);font-size:13px;letter-spacing:0.04em;color:var(--ink-faint);
+    opacity:0;animation:tagIn 1s ease forwards 1.6s;
+    text-align:center;max-width:340px;padding:0 20px;
+  }
+  @keyframes markIn{to{opacity:1;filter:blur(0);}}
+  @keyframes lineGrow{to{width:180px;}}
+  @keyframes tagIn{to{opacity:1;}}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(8,9,11,0.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--hair);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;max-width:1180px;margin:0 auto;}
+  .brand{display:flex;align-items:baseline;gap:9px;}
+  .brand-name{font-family:var(--font-display);font-size:19px;font-weight:600;letter-spacing:0.01em;}
+  .brand-sub{font-family:var(--font-mono);font-size:10px;letter-spacing:0.09em;color:var(--gold);text-transform:uppercase;}
+  .nav-links{display:flex;gap:36px;font-size:14px;color:var(--ink-dim);}
+  .nav-links a{transition:color .25s ease;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-cta{
+    display:flex;align-items:center;gap:8px;background:var(--gold);color:#100c02;
+    padding:10px 18px;border-radius:100px;font-size:13.5px;font-weight:600;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px var(--gold-dim);}
+  @media (max-width:860px){.nav-links{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;padding:168px 0 110px;
+    display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-200px;right:-260px;width:640px;height:640px;border-radius:50%;
+    background:radial-gradient(circle, rgba(201,162,39,0.14), transparent 68%);
+    pointer-events:none;
+  }
+  @media (max-width:960px){.hero{grid-template-columns:1fr;padding-top:140px;}}
+
+  .eyebrow{
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.12em;color:var(--gold);
+    text-transform:uppercase;display:inline-flex;align-items:center;gap:9px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--gold);}
+
+  h1{
+    font-family:var(--font-display);font-weight:500;font-size:clamp(34px,4.6vw,56px);
+    line-height:1.08;letter-spacing:-0.01em;max-width:11.5ch;
+  }
+  h1 em{font-style:italic;color:var(--gold-soft);font-weight:500;}
+
+  .hero-sub{
+    margin-top:24px;font-size:17px;line-height:1.65;color:var(--ink-dim);max-width:44ch;
+  }
+  .hero-ctas{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap;}
+  .btn{
+    padding:14px 26px;border-radius:100px;font-size:14.5px;font-weight:600;
+    display:inline-flex;align-items:center;gap:9px;transition:all .25s ease;
+    border:1px solid transparent;cursor:pointer;
+  }
+  .btn-primary{background:var(--gold);color:#100c02;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px -10px var(--gold-dim);}
+  .btn-ghost{border-color:var(--hair);color:var(--ink);background:rgba(255,255,255,0.02);}
+  .btn-ghost:hover{border-color:var(--gold-dim);background:rgba(201,162,39,0.06);}
+
+  .hero-note{margin-top:28px;font-size:12.5px;color:var(--ink-faint);display:flex;align-items:center;gap:8px;}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--growth);box-shadow:0 0 0 3px rgba(76,175,125,0.18);}
+
+  /* ---------- DASHBOARD SIGNATURE ---------- */
+  .dash{
+    position:relative;background:linear-gradient(165deg, var(--bg-elev), var(--bg-elev-2));
+    border:1px solid var(--hair);border-radius:20px;padding:26px;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,0.6);
+    backdrop-filter:blur(20px);
+  }
+  .dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .dash-title{font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;color:var(--ink-faint);text-transform:uppercase;}
+  .dash-live{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10.5px;color:var(--growth);}
+  .dash-live .dot{background:var(--growth);animation:pulse 1.8s ease infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+  .dash-card{
+    background:rgba(255,255,255,0.02);border:1px solid var(--hair);border-radius:12px;padding:16px;
+  }
+  .dash-label{font-size:11.5px;color:var(--ink-faint);margin-bottom:8px;}
+  .dash-value{font-family:var(--font-mono);font-size:22px;font-weight:500;color:var(--ink);}
+  .dash-delta{font-family:var(--font-mono);font-size:11px;color:var(--growth);margin-top:4px;display:block;}
+
+  .dash-bars{display:flex;align-items:flex-end;gap:6px;height:64px;padding:12px 4px 0;}
+  .dash-bar{flex:1;background:linear-gradient(180deg, var(--gold-soft), var(--gold));border-radius:3px 3px 0 0;opacity:0.85;}
+
+  /* ---------- SECTION BASICS ---------- */
+  section{padding:104px 0;}
+  .section-label{
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.1em;color:var(--gold);
+    text-transform:uppercase;margin-bottom:16px;
+  }
+  h2{
+    font-family:var(--font-display);font-weight:500;font-size:clamp(26px,3.2vw,38px);
+    line-height:1.18;letter-spacing:-0.01em;max-width:16ch;
+  }
+  .lead{font-size:16.5px;color:var(--ink-dim);line-height:1.7;max-width:56ch;margin-top:20px;}
+
+  /* ---------- SOBRE ---------- */
+  .sobre{border-top:1px solid var(--hair);}
+  .sobre-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:start;}
+  @media (max-width:860px){.sobre-grid{grid-template-columns:1fr;gap:32px;}}
+
+  /* ---------- SERVICOS ---------- */
+  .servicos{border-top:1px solid var(--hair);}
+  .serv-head{max-width:60ch;margin-bottom:56px;}
+  .serv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair);border-radius:16px;overflow:hidden;}
+  @media (max-width:860px){.serv-grid{grid-template-columns:1fr;}}
+  .serv-card{background:var(--bg-elev);padding:32px 28px;transition:background .3s ease;}
+  .serv-card:hover{background:var(--bg-elev-2);}
+  .serv-icon{width:38px;height:38px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold-soft);}
+  .serv-card h3{font-family:var(--font-display);font-size:19px;font-weight:500;margin-bottom:10px;}
+  .serv-card p{font-size:14.5px;color:var(--ink-dim);line-height:1.6;}
+
+  /* ---------- PROCESSO ---------- */
+  .processo{border-top:1px solid var(--hair);}
+  .proc-list{margin-top:56px;}
+  .proc-item{
+    display:grid;grid-template-columns:90px 1fr;gap:28px;padding:32px 0;
+    border-top:1px solid var(--hair);align-items:start;
+  }
+  .proc-item:last-child{border-bottom:1px solid var(--hair);}
+  .proc-num{font-family:var(--font-mono);font-size:14px;color:var(--gold);padding-top:4px;}
+  .proc-body h3{font-family:var(--font-display);font-size:21px;font-weight:500;margin-bottom:8px;}
+  .proc-body p{color:var(--ink-dim);font-size:15px;max-width:56ch;line-height:1.65;}
+  @media (max-width:640px){.proc-item{grid-template-columns:1fr;gap:8px;}}
+
+  /* ---------- POR QUE ---------- */
+  .porque{border-top:1px solid var(--hair);}
+  .porque-grid{display:grid;grid-template-columns:0.8fr 1.2fr;gap:64px;}
+  @media (max-width:860px){.porque-grid{grid-template-columns:1fr;gap:32px;}}
+  .check-list{display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;margin-top:8px;}
+  @media (max-width:600px){.check-list{grid-template-columns:1fr;}}
+  .check-item{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--ink);}
+  .check-icon{flex-shrink:0;width:20px;height:20px;color:var(--gold);margin-top:1px;}
+
+  /* ---------- FAQ ---------- */
+  .faq{border-top:1px solid var(--hair);}
+  .faq-list{max-width:760px;margin-top:48px;}
+  .faq-item{border-bottom:1px solid var(--hair);}
+  .faq-q{
+    width:100%;text-align:left;background:none;border:none;color:var(--ink);
+    font-family:var(--font-body);font-size:16.5px;font-weight:500;padding:24px 0;
+    display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:20px;
+  }
+  .faq-q .plus{font-family:var(--font-mono);color:var(--gold);font-size:18px;transition:transform .3s ease;flex-shrink:0;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+  .faq-a p{color:var(--ink-dim);font-size:15px;line-height:1.7;padding-bottom:24px;max-width:60ch;}
+
+  /* ---------- CTA FINAL ---------- */
+  .cta-final{border-top:1px solid var(--hair);text-align:center;padding:120px 0;position:relative;overflow:hidden;}
+  .cta-final::before{
+    content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:800px;height:400px;background:radial-gradient(ellipse, rgba(201,162,39,0.1), transparent 70%);
+    pointer-events:none;
+  }
+  .cta-final h2{max-width:18ch;margin:0 auto;}
+  .cta-final .lead{margin-left:auto;margin-right:auto;text-align:center;}
+  .cta-final .hero-ctas{justify-content:center;margin-top:36px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--hair);padding:44px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .foot-brand{font-family:var(--font-display);font-size:16px;color:var(--ink);}
+  .foot-links{display:flex;gap:26px;font-size:13.5px;color:var(--ink-dim);}
+  .foot-links a:hover{color:var(--gold-soft);}
+  .foot-loc{font-size:12.5px;color:var(--ink-faint);}
+
+  /* ---------- WHATSAPP FLOAT ---------- */
+  .wa-float{
+    position:fixed;bottom:26px;right:26px;z-index:90;
+    width:58px;height:58px;border-radius:50%;background:var(--gold);
+    display:flex;align-items:center;justify-content:center;color:#100c02;
+    box-shadow:0 12px 30px -8px rgba(201,162,39,0.55);
+    transition:transform .25s ease;
+  }
+  .wa-float::before{
+    content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--gold);
+    animation:ring 2.4s ease-out infinite;
+  }
+  @keyframes ring{0%{transform:scale(1);opacity:.7;}100%{transform:scale(1.7);opacity:0;}}
+  .wa-float:hover{transform:scale(1.07);}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease, transform .8s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+</style>
+<meta content="Pazini Studio - Gestão estratégica de Meta Ads e Google Ads para gerar mais clientes e vendas em todo o Brasil." name="description"/><meta content="index,follow" name="robots"/><meta content="Pazini Studio | Tráfego Pago" property="og:title"/><meta content="Transformamos investimento em anúncios em resultados." property="og:description"/><meta content="website" property="og:type"/><meta content="#08090b" name="theme-color"/><script type="application/ld+json">{
+"@context":"https://schema.org",
+"@type":"ProfessionalService",
+"name":"Pazini Studio",
+"areaServed":"Brasil",
+"serviceType":"Gestão de Tráfego Pago",
+"url":"https://SEU-USUARIO.github.io/pazini-studio/"
+}</script></head>
+<body><noscript>Este site funciona melhor com JavaScript habilitado.</noscript>
+<div id="preloader">
+<div class="pre-mark">Pazini Studio</div>
+<div class="pre-line"></div>
+<div class="pre-tag">Transformamos investimento em anúncios em resultado que se sustenta.</div>
+</div>
+<header>
+<nav>
+<div class="brand">
+<span class="brand-name">Pazini Studio</span>
+<span class="brand-sub">Tráfego Pago</span>
+</div>
+<div class="nav-links">
+<a href="#servicos">Serviços</a>
+<a href="#processo">Processo</a>
+<a href="#faq">FAQ</a>
+</div>
+<a class="nav-cta" href="https://wa.me/5521990266020" rel="noopener" target="_blank">
+        Falar no WhatsApp
+      </a>
+</nav>
+</header>
+<main>
+<section class="hero">
+<div class="container" style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;">
+<div>
+<div class="eyebrow">Meta Ads · Google Ads</div>
+<h1>Cada real investido, <em>trabalhando</em> para o seu resultado.</h1>
+<p class="hero-sub">Gestão estratégica de tráfego pago para transformar cliques em clientes — com acompanhamento próximo e decisões guiadas por dados, não por achismo.</p>
+<div class="hero-ctas">
+<a class="btn btn-primary" href="https://wa.me/5521990266020" rel="noopener" target="_blank">Solicitar diagnóstico gratuito</a>
+<a class="btn btn-ghost" href="#processo">Como funciona</a>
+</div>
+<div class="hero-note"><span class="dot"></span> Atendimento 100% online, em todo o Brasil</div>
+</div>
+<div class="dash">
+<div class="dash-top">
+<span class="dash-title">Exemplo ilustrativo de indicadores</span>
+<span class="dash-live"><span class="dot"></span>ao vivo</span>
+</div>
+<div class="dash-grid">
+<div class="dash-card">
+<div class="dash-label">ROAS</div>
+<div class="dash-value" data-decimals="1" data-suffix="x" data-target="4.8">0x</div>
+<span class="dash-delta">↑ retorno sobre investimento</span>
+</div>
+<div class="dash-card">
+<div class="dash-label">Custo por resultado</div>
+<div class="dash-value" data-decimals="0" data-prefix="R$ " data-target="18">R$ 0</div>
+<span class="dash-delta">↓ otimizado por teste A/B</span>
+</div>
+<div class="dash-card">
+<div class="dash-label">CTR médio</div>
+<div class="dash-value" data-decimals="1" data-suffix="%" data-target="3.2">0%</div>
+<span class="dash-delta">↑ acima da média do setor</span>
+</div>
+<div class="dash-card">
+<div class="dash-label">Cliques qualificados</div>
+<div class="dash-value" data-decimals="0" data-target="2140">0</div>
+<span class="dash-delta">↑ últimos 30 dias</span>
+</div>
+</div>
+<div class="dash-bars">
+<div class="dash-bar" style="height:35%"></div>
+<div class="dash-bar" style="height:48%"></div>
+<div class="dash-bar" style="height:40%"></div>
+<div class="dash-bar" style="height:62%"></div>
+<div class="dash-bar" style="height:58%"></div>
+<div class="dash-bar" style="height:74%"></div>
+<div class="dash-bar" style="height:70%"></div>
+<div class="dash-bar" style="height:88%"></div>
+<div class="dash-bar" style="height:100%"></div>
+</div>
+<p style="font-size:11px;color:#9c9a93;margin-top:8px;">Indicadores meramente ilustrativos. Os resultados variam conforme cada negócio.</p></div>
+</div>
+</section>
+<section class="sobre">
+<div class="container sobre-grid">
+<div class="reveal">
+<div class="section-label">Sobre</div>
+<h2>Estratégia por trás de cada clique.</h2>
+</div>
+<div class="reveal">
+<p class="lead">O Pazini Studio nasceu construindo marcas — e agora aplica a mesma bagagem em estratégia e posicionamento para gerir campanhas de tráfego pago. Não vendemos cliques: construímos estruturas de anúncios pensadas para gerar clientes de verdade, com metas claras e acompanhamento próximo em cada etapa.</p>
+<p class="lead">Estamos começando esta frente agora — o que significa atenção total, dedicação real e um investimento genuíno no resultado de cada cliente que confia no nosso trabalho.</p>
+</div>
+</div>
+</section>
+<section class="servicos" id="servicos">
+<div class="container">
+<div class="serv-head reveal">
+<div class="section-label">O que fazemos</div>
+<h2>Gestão completa de tráfego pago, de ponta a ponta.</h2>
+</div>
+<div class="serv-grid reveal">
+<div class="serv-card">
+<div class="serv-icon">M</div>
+<h3>Gestão de Meta Ads</h3>
+<p>Campanhas no Instagram e Facebook estruturadas para atrair e converter o público certo.</p>
+</div>
+<div class="serv-card">
+<div class="serv-icon">G</div>
+<h3>Gestão de Google Ads</h3>
+<p>Anúncios de pesquisa, display e shopping para capturar quem já busca pelo seu produto.</p>
+</div>
+<div class="serv-card">
+<div class="serv-icon">C</div>
+<h3>Criativos para anúncios</h3>
+<p>Peças visuais pensadas para performance, não só estética — feitas para parar o scroll.</p>
+</div>
+<div class="serv-card">
+<div class="serv-icon">T</div>
+<h3>Copywriting persuasivo</h3>
+<p>Textos que comunicam valor com clareza e conduzem à ação.</p>
+</div>
+<div class="serv-card">
+<div class="serv-icon">A</div>
+<h3>Testes e otimização</h3>
+<p>Testes A/B contínuos em públicos, criativos e ofertas para reduzir custo e aumentar retorno.</p>
+</div>
+<div class="serv-card">
+<div class="serv-icon">R</div>
+<h3>Relatórios claros</h3>
+<p>Acompanhamento objetivo dos números que importam, sem jargão desnecessário.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="processo" id="processo">
+<div class="container">
+<div class="reveal">
+<div class="section-label">Como funciona</div>
+<h2>Um processo enxuto, do diagnóstico à otimização contínua.</h2>
+</div>
+<div class="proc-list reveal">
+<div class="proc-item">
+<div class="proc-num">01</div>
+<div class="proc-body">
+<h3>Diagnóstico</h3>
+<p>Entendemos seu negócio, seu público e o que já foi testado até aqui.</p>
+</div>
+</div>
+<div class="proc-item">
+<div class="proc-num">02</div>
+<div class="proc-body">
+<h3>Estratégia</h3>
+<p>Definimos metas, orçamento e os canais mais adequados — Meta, Google, ou ambos.</p>
+</div>
+</div>
+<div class="proc-item">
+<div class="proc-num">03</div>
+<div class="proc-body">
+<h3>Implementação</h3>
+<p>Criamos e lançamos as campanhas, com estrutura pensada para gerar dados rapidamente.</p>
+</div>
+</div>
+<div class="proc-item">
+<div class="proc-num">04</div>
+<div class="proc-body">
+<h3>Otimização contínua</h3>
+<p>Ajustamos públicos, criativos e orçamento com base em dados reais, semana após semana.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="porque">
+<div class="container porque-grid">
+<div class="reveal">
+<div class="section-label">Por que o Pazini Studio</div>
+<h2>Atenção de estúdio, mentalidade de performance.</h2>
+</div>
+<div class="check-list reveal">
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Acompanhamento próximo e transparente</div>
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Estratégia antes da execução</div>
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Decisões guiadas por dados, não achismo</div>
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Relatórios claros e objetivos</div>
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Comunicação direta via WhatsApp</div>
+<div class="check-item"><svg class="check-icon" fill="none" viewbox="0 0 20 20"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>Foco em resultado, não em vaidade de números</div>
+</div>
+</div>
+</section>
+<section class="faq" id="faq">
+<div class="container">
+<div class="reveal">
+<div class="section-label">Perguntas frequentes</div>
+<h2>Tudo o que você precisa saber antes de começar.</h2>
+</div>
+<div class="faq-list reveal">
+<div class="faq-item">
+<button class="faq-q">Qual o investimento mínimo em anúncios?<span class="plus">+</span></button>
+<div class="faq-a"><p>Varia conforme o segmento e o objetivo da campanha. No diagnóstico inicial, definimos juntos um orçamento realista para o seu momento.</p></div>
+</div>
+<div class="faq-item">
+<button class="faq-q">Em quanto tempo vejo resultados?<span class="plus">+</span></button>
+<div class="faq-a"><p>As primeiras otimizações acontecem já nas primeiras semanas. Resultados consistentes costumam se consolidar ao longo dos primeiros meses de campanha.</p></div>
+</div>
+<div class="faq-item">
+<button class="faq-q">Vocês atendem todo o Brasil?<span class="plus">+</span></button>
+<div class="faq-a"><p>Sim. Todo o atendimento é feito de forma online, de qualquer lugar do país.</p></div>
+</div>
+<div class="faq-item">
+<button class="faq-q">Preciso já ter site para anunciar?<span class="plus">+</span></button>
+<div class="faq-a"><p>Não necessariamente. É possível anunciar direcionando para redes sociais ou WhatsApp, mas um site ou landing page costuma aumentar a conversão.</p></div>
+</div>
+<div class="faq-item">
+<button class="faq-q">Como funciona o contrato?<span class="plus">+</span></button>
+<div class="faq-a"><p>Trabalhamos com acompanhamento mensal, sem burocracia. Os detalhes são combinados diretamente no diagnóstico inicial.</p></div>
+</div>
+</div>
+</div>
+</section>
+<section class="cta-final">
+<div class="container">
+<div class="reveal" style="display:flex;flex-direction:column;align-items:center;">
+<h2>Pronto para transformar seu investimento em resultado?</h2>
+<p class="lead">Fale agora com o Pazini Studio e receba um diagnóstico gratuito sobre suas campanhas de Meta e Google Ads.</p>
+<div class="hero-ctas">
+<a class="btn btn-primary" href="https://wa.me/5521990266020" rel="noopener" target="_blank">Solicitar orçamento pelo WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container foot-row">
+<span class="foot-brand">Pazini Studio</span>
+<div class="foot-links">
+<a href="https://wa.me/5521990266020" rel="noopener" target="_blank">WhatsApp</a>
+<a href="https://www.instagram.com/pazinistudio" rel="noopener" target="_blank">Instagram</a>
+<a href="https://www.facebook.com/profile.php?id=61590252055811" rel="noopener" target="_blank">Facebook</a>
+</div>
+<span class="foot-loc">Rio de Janeiro · Atendimento em todo o Brasil</span>
+</div>
+</footer>
+<a aria-label="Falar no WhatsApp" class="wa-float" href="https://wa.me/5521990266020" rel="noopener" target="_blank">
+<svg fill="none" height="26" viewbox="0 0 24 24" width="26"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.32A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="#100c02"></path><path d="M8.5 8.5c.3-.6.5-.6.8-.6h.6c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.7.1.1.1.3 0 .4-.1.2-.1.3-.3.5-.1.2-.3.3-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.7.8.2.1.4.2.4.3.1.2.1.9-.2 1.6-.3.7-1.5 1.3-2.1 1.4-.6.1-1.2.2-3.9-.9C10 15.9 8 13.3 7.8 13c-.2-.3-1.4-1.9-1.4-3.6 0-.5.1-.7.2-.9z" fill="#fff"></path></svg>
+</a>
+<script>
+  // Preloader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('preloader').classList.add('hide'), 2200);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Dashboard counters
+  function animateCounters() {
+    document.querySelectorAll('.dash-value').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0');
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      let start = 0;
+      const duration = 1600;
+      const startTime = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = start + (target - start) * eased;
+        el.textContent = prefix + value.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  setTimeout(animateCounters, 2400);
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const btn = item.querySelector('.faq-q');
+    const ans = item.querySelector('.faq-a');
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-a').style.maxHeight = null; });
+      if (!isOpen) { item.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+    });
+  });
+</script>
+</body>
+</html>
